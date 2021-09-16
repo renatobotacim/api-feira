@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @author Renato
  */
-class userTipes extends Model {
+class Transactions extends Model {
 
     /**
      * Bank table for this model
@@ -48,21 +48,21 @@ class userTipes extends Model {
      * timestamp is used in transferencia_data for execution registred
      * @var bool
      */
-    public $timestamps = true;
+    public $timestamps = false;
 
     
     /**
      * Validation Rules for Table Fields
      * @var array
      */
-    const RULE_TIPE_USER = [
-        'transferencia_id' => 'required',
-        'transferencia_valor' => 'required|numeric',
-        'transferencia_pagador' => 'required|numeric',
-        'transferencia_beneficiado' => 'required|numeric',
-        'transferencia_data' => 'required|numeric',
-        'transferencia_status' => 'required|boolean',
-        'transferencia_mensagem' => 'required|max:50|alpha'
+    const RULE_TRANSACTION = [
+//        'transferencia_id' => 'required',
+//        'transferencia_valor' => 'required|numeric',
+//        'transferencia_pagador' => 'required|numeric',
+//        'transferencia_beneficiado' => 'required|numeric',
+////        'transferencia_data' => 'required|numeric',
+////        'transferencia_status' => 'required|boolean',
+//        'transferencia_mensagem' => 'required|max:50'
     ];
 
 }

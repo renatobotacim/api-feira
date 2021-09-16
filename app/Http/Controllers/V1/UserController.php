@@ -4,14 +4,14 @@ namespace App\Http\Controllers\V1;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\UserTypeService;
+use App\Services\UserService;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller {
 
     private $service;
 
-    public function __construct(\App\Services\UserTypeService $Service) {
+    public function __construct(UserService $Service) {
         $this->service = $Service;
     }
 

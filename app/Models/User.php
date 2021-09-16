@@ -50,9 +50,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'usuario_senha',
         'usuario_registro',
-        'usuario_saldo'
+//        'usuario_saldo'
     ];
 
+    
+        /**
+     * active timestamps
+     * timestamp is used in transferencia_data for execution registred
+     * @var bool
+     */
+    public $timestamps = false;
+    
     /**
      * Validation Rules for Table Fields
      * @var array
@@ -70,6 +78,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Transactions::class);
     }
 
+    /**
+     * method for autentication using jwt
+     * @return type
+     */
     public function getJWTIdentifier() {
         return $this->getKey();
     }

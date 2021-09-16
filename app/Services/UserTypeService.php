@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Validator;
 use App\Exceptions\CustomValidationException;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB;
 use App\Models\UserTypes;
 use App\Repositories\UserTypeRepositoryInterface;
 

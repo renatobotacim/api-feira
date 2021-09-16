@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\UserTypeService;
+use App\Services\TransactionsService;
+use App\Http\Controllers\Controller;
 
-class UserTypeController extends Controller {
+class TransactionsController extends Controller {
 
     private $service;
 
-    public function __construct(\App\Services\UserTypeService $Service) {
+    public function __construct(TransactionsService $Service) {
         $this->service = $Service;
     }
 
@@ -32,14 +33,20 @@ class UserTypeController extends Controller {
     }
 
     public function create(Request $request) {
-        try {
+        
+        
             return response()->json(
                             $this->service->create($request->all()),
                             Response::HTTP_CREATED
             );
-        } catch (\Exception $e) {
-            return $this->error($e->getMessage());
-        }
+    //        try {
+//            return response()->json(
+//                            $this->service->create($request->all()),
+//                            Response::HTTP_CREATED
+//            );
+//        } catch (\Exception $e) {
+//            return $this->error($e->getMessage());
+//        }
     }
 
     public function update(int $id, Request $request) {
