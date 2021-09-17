@@ -41,46 +41,34 @@ class TransactionsService extends AbstractService {
     }
 
     /**
-     * "transferencia_valor" -> deciamal(10,2)
-     * "transferencia_pagador" -> (int) usuario_id
-     * "transferencia_beneficiado" -> (int) usuario_id
-     * "transferencia_data" -> timestamp
-     * "transferencia_status" -> bool -> Transfencia ok 1- 
-     * "transferencia_mensagem" -> string
+     * method created to register records
+     * @param array $data
+     * @return type array
+     * @throws CustomValidationException
      */
     public function create(array $data) {
+
+        //Validation of user types to see if they can send / receive transfers
         $checkSendReceiveMoneyPayer = $this->userService->checkSendReceive($data['transferencia_pagador']);
         $checkSendReceiveMoneyPayee = $this->userService->checkSendReceive($data['transferencia_beneficiado']);
 
-        /**
-         * Validação dos tipos de usuário para verficar se eles podem enviar e podem receber
-         */
         if ($checkSendReceiveMoneyPayer['tipo_usuario_envia'] && $checkSendReceiveMoneyPayee['tipo_usuario_recebe']) {
 
             //verifica type para enviar e receber.
             $payerBalance = $this->userService->checkBalance($data['transferencia_pagador']);
-            /**
-             * inicia o processo de tranferência caso o saldo seja maior ou igual ao valor que ela vai executar.
-             */
             if (($data['transferencia_valor'] > 0) && ($payerBalance['usuario_saldo'] >= $data['transferencia_valor'])) {
 
-                /**
-                 * valida os dados da requisição de acordo com o especificado no modelo.
-                 */
+                //starts the transfer process if the balance is greater than or equal to the amount it will execute.
+                // validates the request data as specified in the model.
                 $validator = Validator::make($data, Transactions::RULE_TRANSACTION);
                 if ($validator->fails()) {
                     $this->messageResponse('Data validation failed', 401, true);
                 }
 
-
-                /**
-                 * Verificação por meio de um verificador exeterno
-                 */
+                //external verification
                 if ($this->authorizer()) {
 
-                    /**
-                     * transfer validation 
-                     */
+                    //transfer validation block
                     DB::beginTransaction();
 
                     //register the transfer in the bank
@@ -97,28 +85,15 @@ class TransactionsService extends AbstractService {
                         'usuario_saldo' => $payeeBalance['usuario_saldo'] + $data['transferencia_valor']
                     ]);
 
+                    //verification for validation
                     if ($transaction && $payer && $payee) {
                         DB::commit();
+                        //sending the success notification
                         return $this->sendNotification(1);
                     } else {
                         DB::rollBack();
+                        return $this->messageResponse('sorry, there was an error in your transfer. Try again!', 401, true);
                     }
-
-//                    $trasaction = $this->repository->create($data);
-//                    if (!empty($trasaction)) {
-//                        //update saldo pagador
-//                        $this->userService->update($data['transferencia_pagador'], ['usuario_saldo' => ($payerBalance['usuario_saldo'] - $data['transferencia_valor'])]);
-//
-//                        //update saldo beneficado
-//                        $payeeBalance = $this->userService->checkBalance($data['transferencia_beneficiado']);
-//                        $this->userService->update($data['transferencia_beneficiado'], ['usuario_saldo' => ($payeeBalance['usuario_saldo'] + $data['transferencia_valor'])]);
-//
-//                        //setar 2 na transferência.
-//                        //mensagem de sucesso
-//                        $a = $this->sendNotification(1, '12');
-//                    } else {
-//                        throw new CustomValidationException('Falha na validação dos dados', $validator->errors());
-//                    }
                 } else {
                     return $this->messageResponse('Sorry, your transfer was not authorized.', 401, true);
                 }
@@ -156,6 +131,7 @@ class TransactionsService extends AbstractService {
 //        return $this->repository->delete($id);
     }
 
+    
     /**
      * @param int $idUser
      * @param string $message optional. Used when sending a specific message. NOTE: This rule still needs to be implemented.
@@ -170,6 +146,7 @@ class TransactionsService extends AbstractService {
         return ['message' => json_decode($response->getBody())->message];
     }
 
+    
     /**
      * external authorizer method
      * @return object
@@ -182,4 +159,5 @@ class TransactionsService extends AbstractService {
         $response = $authorizer->get('/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
         return ['statysCode' => $response->getStatusCode(), 'message' => json_decode($response->getBody())->message];
     }
+
 }

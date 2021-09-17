@@ -26,7 +26,7 @@ $router->group(['prefix' => "/api/v1/userstype", 'namespace' => 'V1'], function 
 
 $router->group(['prefix' => "/api/v1/users", 'namespace' => 'V1'], function () use ($router) {
     $router->post("", "UserController@create");
-    $router->get("", "UserController@getAll");
+//    $router->get("", "UserController@getAll");
     $router->get("/{id}", "UserController@get");
     $router->put("/{id}", "UserController@update");
     $router->delete("/{id}", "UserController@delete");
@@ -35,8 +35,8 @@ $router->group(['prefix' => "/api/v1/users", 'namespace' => 'V1'], function () u
 
 $router->group(['prefix' => "/api/v1/transacticion", 'namespace' => 'V1'], function () use ($router) {
     $router->post("", "TransactionsController@create");
-    $router->get("", "TransactionsController@getAll");
-    $router->get("/{id}", "TransactionsController@get");
-    $router->put("/{id}", "TransactionsController@update");
-    $router->delete("/{id}", "TransactionsController@delete");
+//    $router->get("", "TransactionsController@getAll");
+//    $router->get("/{id}", "TransactionsController@get");
+//    $router->put("/{id}", "TransactionsController@update");
+//    $router->delete("/{id}", "TransactionsController@delete");
 });

@@ -1,13 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace App\Models;
 
+/**
+ * inf_transferencias data model
+ *
+ * @author Renato
+ */
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -56,13 +55,10 @@ class Transactions extends Model implements \JsonSerializable{
      * @var array
      */
     const RULE_TRANSACTION = [
-//        'transferencia_id' => 'required',
-//        'transferencia_valor' => 'required|numeric',
-//        'transferencia_pagador' => 'required|numeric',
-//        'transferencia_beneficiado' => 'required|numeric',
-////        'transferencia_data' => 'required|numeric',
-////        'transferencia_status' => 'required|boolean',
-//        'transferencia_mensagem' => 'required|max:50'
+        'transferencia_valor' => 'required|numeric',
+        'transferencia_pagador' => 'required|numeric',
+        'transferencia_beneficiado' => 'required|numeric',
+        'transferencia_mensagem' => 'required|max:50'
     ];
 
 }

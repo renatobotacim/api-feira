@@ -25,22 +25,7 @@ class TransactionsRepositoryEloquent implements TransactionsRepositoryInterface 
     }
 
     public function create(array $data) {
-
-//        DB::beginTransaction();
-//        $transaction = $this->model->create($data);
-//       
-//        
-//        $payer = $this->modelUser->update($data['transferencia_pagador'], $a);
-//        $payee = $this->modelUser->update($data['transferencia_beneficiado'], $b);
-//
-//        if ($transaction && $payer && $payee) {
-//            DB::commit();
-//        } else {
-//            DB::rollBack();
-//        }
-        
         return $this->model->create($data);
-//        return ['fiquei','verde'];
     }
 
     public function update(int $id, array $data) {

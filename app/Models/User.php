@@ -8,6 +8,11 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
+/**
+ * inf_usuarios data model
+ *
+ * @author Renato
+ */
 class User extends Model implements AuthenticatableContract, AuthorizableContract {
 
     use Authenticatable,
@@ -74,20 +79,23 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'usuario_status' => 'required'
     ];
 
+    /**
+     * 1:N relationship definition
+     */
     public function transactions() {
         return $this->hasMany(Transactions::class);
     }
 
     /**
      * method for autentication using jwt
-     * @return type
+     * @return string
      */
     public function getJWTIdentifier() {
         return $this->getKey();
     }
 
     public function getJWTCustomClaims() {
-        return [];
+        return '';
     }
 
 }
