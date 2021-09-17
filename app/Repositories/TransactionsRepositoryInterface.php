@@ -3,10 +3,11 @@
 namespace App\Repositories;
 
 use App\Models\Transactions;
+use App\Repositories\UserRepositoryEloquent;
 
 interface TransactionsRepositoryInterface {
 
-    public function __construct(Transactions $data);
+    public function __construct(Transactions $data, UserRepositoryEloquent $user);
 
     public function getAll();
 

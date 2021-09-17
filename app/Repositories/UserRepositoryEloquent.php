@@ -38,6 +38,8 @@ class UserRepositoryEloquent implements UserRepositoryInterface {
                ->select('tipo_usuario_envia','tipo_usuario_recebe')
                ->find($id);
     }
+    
+    
     function balanceToUser(int $id) {
        return $this->model
                ->select('usuario_saldo')
