@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @author Renato
  */
-class Transactions extends Model {
+class Transactions extends Model implements \JsonSerializable{
 
     /**
      * Bank table for this model

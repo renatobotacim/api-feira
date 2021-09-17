@@ -20,6 +20,6 @@ interface UserRepositoryInterface {
     
     function checkSendReceive(int $id);
     
-    function balanceToUser(int $id);
+    function checkBalance(int $id);
     
 }

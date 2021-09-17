@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use App\Exceptions\CustomValidationException;
 use App\Models\Transactions;
 use App\Repositories\TransactionsRepositoryInterface;
@@ -48,18 +49,16 @@ class TransactionsService extends AbstractService {
      * "transferencia_mensagem" -> string
      */
     public function create(array $data) {
-
-        $checkSendMoneyPayer = $this->userService->checkSendReceive($data['transferencia_pagador']);
-        $checkSendMoneyPayee = $this->userService->checkSendReceive($data['transferencia_beneficiado']);
+        $checkSendReceiveMoneyPayer = $this->userService->checkSendReceive($data['transferencia_pagador']);
+        $checkSendReceiveMoneyPayee = $this->userService->checkSendReceive($data['transferencia_beneficiado']);
 
         /**
          * Validação dos tipos de usuário para verficar se eles podem enviar e podem receber
          */
-        if ($checkSendMoneyPayer['tipo_usuario_envia'] && $checkSendMoneyPayee['tipo_usuario_recebe']) {
+        if ($checkSendReceiveMoneyPayer['tipo_usuario_envia'] && $checkSendReceiveMoneyPayee['tipo_usuario_recebe']) {
 
             //verifica type para enviar e receber.
             $payerBalance = $this->userService->checkBalance($data['transferencia_pagador']);
-
             /**
              * inicia o processo de tranferência caso o saldo seja maior ou igual ao valor que ela vai executar.
              */
@@ -77,14 +76,35 @@ class TransactionsService extends AbstractService {
                 /**
                  * Verificação por meio de um verificador exeterno
                  */
-                $authorizer = $this->authorizer();
-                if ($authorizer == "Autorizado") {
+                if ($this->authorizer()) {
 
-
-                    /*
-                     * Regitra no banco de dados a transição.
+                    /**
+                     * transfer validation 
                      */
-                    $trasaction = $this->repository->create($data);
+                    DB::beginTransaction();
+
+                    //register the transfer in the bank
+                    $transaction = $this->repository->create($data);
+
+                    //change payer balance
+                    $payer = $this->userService->update($data['transferencia_pagador'], [
+                        'usuario_saldo' => ($payerBalance['usuario_saldo'] - $data['transferencia_valor'])
+                    ]);
+
+                    //change payee balance
+                    $payeeBalance = $this->userService->checkBalance($data['transferencia_beneficiado']);
+                    $payee = $this->userService->update($data['transferencia_beneficiado'], [
+                        'usuario_saldo' => $payeeBalance['usuario_saldo'] + $data['transferencia_valor']
+                    ]);
+
+                    if ($transaction && $payer && $payee) {
+                        DB::commit();
+                        return $this->sendNotification(1);
+                    } else {
+                        DB::rollBack();
+                    }
+
+//                    $trasaction = $this->repository->create($data);
 //                    if (!empty($trasaction)) {
 //                        //update saldo pagador
 //                        $this->userService->update($data['transferencia_pagador'], ['usuario_saldo' => ($payerBalance['usuario_saldo'] - $data['transferencia_valor'])]);
@@ -147,8 +167,7 @@ class TransactionsService extends AbstractService {
             'verify' => false
         ]);
         $response = $notification->get('/notify');
-        $messageResponse = json_decode($response->getBody());
-        return $messageResponse->message;
+        return ['message' => json_decode($response->getBody())->message];
     }
 
     /**
@@ -161,7 +180,6 @@ class TransactionsService extends AbstractService {
             'verify' => false]
         );
         $response = $authorizer->get('/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
-        return json_decode($response->getBody())->message;
+        return ['statysCode' => $response->getStatusCode(), 'message' => json_decode($response->getBody())->message];
     }
-
 }

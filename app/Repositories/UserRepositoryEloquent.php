@@ -31,19 +31,18 @@ class UserRepositoryEloquent implements UserRepositoryInterface {
     public function delete(int $id) {
         return $this->model->find($id)->delete();
     }
-    
+
     function checkSendReceive(int $id) {
-       return $this->model
-               ->join('inf_tipos_usuarios', 'tipo_usuario_id', '=', 'usuario_id')
-               ->select('tipo_usuario_envia','tipo_usuario_recebe')
-               ->find($id);
+        return $this->model
+                        ->join('inf_tipos_usuarios', 'tipo_usuario_id', '=', 'usuario_tipo_usuario_id')
+                        ->select('tipo_usuario_envia', 'tipo_usuario_recebe')
+                        ->find($id);
     }
-    
-    
-    function balanceToUser(int $id) {
-       return $this->model
-               ->select('usuario_saldo')
-               ->find($id);
+
+    function checkBalance(int $id) {
+        return $this->model
+                        ->select('usuario_saldo')
+                        ->find($id);
     }
 
 }

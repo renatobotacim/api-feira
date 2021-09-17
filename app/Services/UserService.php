@@ -88,7 +88,7 @@ class UserService extends AbstractService {
      * @return float
      */
     function checkBalance(int $idUser) {
-        return $this->repository->balanceToUser($idUser);
+        return $this->repository->checkBalance($idUser);
     }
 
 }
