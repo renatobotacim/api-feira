@@ -2,12 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/E:/wamp/www/projetos/PicPay/back/api-feira/app/Repositories/UserRepositoryInterface.php</file>
-            <file>file:/E:/wamp/www/projetos/PicPay/back/api-feira/app/Services/AbstractService.php</file>
-            <file>file:/E:/wamp/www/projetos/PicPay/back/api-feira/app/Repositories/UserRepositoryEloquent.php</file>
-            <file>file:/E:/wamp/www/projetos/PicPay/back/api-feira/app/Services/UserService.php</file>
-            <file>file:/E:/wamp/www/projetos/PicPay/back/api-feira/routes/web.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
